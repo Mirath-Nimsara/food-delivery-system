@@ -2,25 +2,42 @@
 #include <string.h>
 #include "menu.h"
 
-// Global Variables for the Menu
 MenuItem menuList[MAX_MENU]; 
 int menuCount = 0; 
 
-// 1. Function using Array
+// Helper function to check if a Food ID exists
+int isFoodIdValid(int targetId) {
+    for (int i = 0; i < menuCount; i++) {
+        if (menuList[i].id == targetId) {
+            return 1; // ID found
+        }
+    }
+    return 0; // ID not found
+}
+
 void addMenuItem() {
     if (menuCount >= MAX_MENU) {
         printf("Error: Menu is full!\n");
         return;
     }
 
+    int tempId;
     printf("\n--- Add New Menu Item ---\n");
     printf("Enter Food ID: ");
-    scanf("%d", &menuList[menuCount].id);
+    scanf("%d", &tempId);
+
+    // BUG FIX: Prevent duplicate Menu IDs
+    if (isFoodIdValid(tempId)) {
+        printf("Error: Food ID %d already exists in the menu!\n", tempId);
+        return;
+    }
+
+    menuList[menuCount].id = tempId;
     
     printf("Enter Food Name: ");
-    getchar(); // Clear buffer
+    getchar(); 
     fgets(menuList[menuCount].name, 50, stdin);
-    menuList[menuCount].name[strcspn(menuList[menuCount].name, "\n")] = 0; // Remove newline
+    menuList[menuCount].name[strcspn(menuList[menuCount].name, "\n")] = 0; 
 
     printf("Enter Price: ");
     scanf("%f", &menuList[menuCount].price);
@@ -32,7 +49,6 @@ void addMenuItem() {
     printf("Item added successfully!\n");
 }
 
-// 2. Function using Selection Sort (Algorithm Requirement)
 void sortMenuByPrice() {
     for (int i = 0; i < menuCount - 1; i++) {
         int min_idx = i;
@@ -40,27 +56,22 @@ void sortMenuByPrice() {
             if (menuList[j].price < menuList[min_idx].price)
                 min_idx = j;
         }
-        // Swap the elements
         MenuItem temp = menuList[min_idx];
         menuList[min_idx] = menuList[i];
         menuList[i] = temp;
     }
-    printf("Menu sorted by price (Cheapest first)!\n");
+    printf("Menu sorted by price!\n");
 }
 
-// 3. Function using Recursion (Algorithm Requirement)
 void searchMenuRecursive(int index, int targetId) {
-    // Base Case: Not found
     if (index >= menuCount) {
         printf("Item with ID %d not found in menu.\n", targetId);
         return;
     }
-    // Base Case: Found
     if (menuList[index].id == targetId) {
         printf("Found: %s - Price: %.2f\n", menuList[index].name, menuList[index].price);
         return;
     }
-    // Recursive Step
     searchMenuRecursive(index + 1, targetId);
 }
 

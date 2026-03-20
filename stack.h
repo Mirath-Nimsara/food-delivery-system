@@ -1,18 +1,22 @@
 #ifndef STACK_H
 #define STACK_H
 
-#define MAX_STACK 50
+#define MAX_STACK 100
 
-// Data Structure: Stack (Requirement 7)
+// Structure to hold all details of a cancelled order
 typedef struct {
-    int log[MAX_STACK];
+    int orderId;
+    char customerName[50];
+    int foodId;
+} UndoLog;
+
+typedef struct {
+    UndoLog logs[MAX_STACK]; // Array of structs
     int top;
 } UndoStack;
 
-// Function Prototypes
 void initStack();
-void pushUndo(int orderId); // Push
-int popUndo();             // Pop
-void displayUndoLog();
+void pushUndo(int id, char* name, int fId);
+UndoLog popUndo();
 
 #endif

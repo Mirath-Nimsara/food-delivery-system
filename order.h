@@ -1,18 +1,19 @@
 #ifndef ORDER_H
 #define ORDER_H
 
-// Data Structure: Linked List (Requirement 2)
 typedef struct Order {
     int orderId;
     char customerName[50];
-    int foodId;        // Links to the ID in the Menu Array
-    struct Order* next; // Pointer to the next node
+    int foodId;
+    struct Order* next;
 } Order;
 
-// Function Prototypes
+// Function Prototypes - MUST BE HERE
 void placeOrder();
 void displayActiveOrders();
-void searchOrderRecursive(Order* current, int targetId); 
-void cancelOrder();
+void searchOrderRecursive(Order* current, int targetId);
+void cancelOrder(int id);
+int isOrderIdDuplicate(int id);
+void restoreOrder(int id, char* name, int fId); // Added this
 
 #endif
