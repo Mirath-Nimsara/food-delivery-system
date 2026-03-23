@@ -12,9 +12,10 @@ typedef struct {
 
 // Function Prototypes
 void addMenuItem();
-void sortMenuByPrice();
-void searchMenuRecursive(int index, int targetId);
-void displayMenu();
-int isFoodIdValid(int targetId); // Validation helper
+void displayMenuById();         // Bubble Sort
+void displayMenuByPrice();      // Selection Sort
+void displayMenuByPopularity(); // Insertion Sort
+void printMenuArray(MenuItem arr[], int count);
+int isFoodIdValid(int targetId);
 
 #endif

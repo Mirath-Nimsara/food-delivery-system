@@ -5,14 +5,11 @@
 MenuItem menuList[MAX_MENU]; 
 int menuCount = 0; 
 
-// Helper function to check if a Food ID exists
 int isFoodIdValid(int targetId) {
     for (int i = 0; i < menuCount; i++) {
-        if (menuList[i].id == targetId) {
-            return 1; // ID found
-        }
+        if (menuList[i].id == targetId) return 1;
     }
-    return 0; // ID not found
+    return 0;
 }
 
 void addMenuItem() {
@@ -26,14 +23,12 @@ void addMenuItem() {
     printf("Enter Food ID: ");
     scanf("%d", &tempId);
 
-    // BUG FIX: Prevent duplicate Menu IDs
     if (isFoodIdValid(tempId)) {
-        printf("Error: Food ID %d already exists in the menu!\n", tempId);
+        printf("Error: Food ID %d already exists!\n", tempId);
         return;
     }
 
     menuList[menuCount].id = tempId;
-    
     printf("Enter Food Name: ");
     getchar(); 
     fgets(menuList[menuCount].name, 50, stdin);
@@ -41,7 +36,6 @@ void addMenuItem() {
 
     printf("Enter Price: ");
     scanf("%f", &menuList[menuCount].price);
-
     printf("Enter Popularity (1-10): ");
     scanf("%d", &menuList[menuCount].popularity);
 
@@ -49,37 +43,57 @@ void addMenuItem() {
     printf("Item added successfully!\n");
 }
 
-void sortMenuByPrice() {
+void printMenuArray(MenuItem arr[], int count) {
+    if (count == 0) {
+        printf("Menu is empty!\n");
+        return;
+    }
+    printf("\nID\tName\t\tPrice\tPopularity\n");
+    for (int i = 0; i < count; i++) {
+        printf("%d\t%s\t\t%.2f\t%d\n", arr[i].id, arr[i].name, arr[i].price, arr[i].popularity);
+    }
+}
+
+void displayMenuById() {
+    MenuItem temp[MAX_MENU];
+    memcpy(temp, menuList, sizeof(MenuItem) * menuCount);
     for (int i = 0; i < menuCount - 1; i++) {
-        int min_idx = i;
-        for (int j = i + 1; j < menuCount; j++) {
-            if (menuList[j].price < menuList[min_idx].price)
-                min_idx = j;
+        for (int j = 0; j < menuCount - i - 1; j++) {
+            if (temp[j].id > temp[j + 1].id) {
+                MenuItem t = temp[j]; temp[j] = temp[j+1]; temp[j+1] = t;
+            }
         }
-        MenuItem temp = menuList[min_idx];
-        menuList[min_idx] = menuList[i];
-        menuList[i] = temp;
     }
-    printf("Menu sorted by price!\n");
+    printf("\n--- Sorted by ID (Bubble) ---");
+    printMenuArray(temp, menuCount);
 }
 
-void searchMenuRecursive(int index, int targetId) {
-    if (index >= menuCount) {
-        printf("Item with ID %d not found in menu.\n", targetId);
-        return;
+void displayMenuByPrice() {
+    MenuItem temp[MAX_MENU];
+    memcpy(temp, menuList, sizeof(MenuItem) * menuCount);
+    for (int i = 0; i < menuCount - 1; i++) {
+        int min = i;
+        for (int j = i + 1; j < menuCount; j++) {
+            if (temp[j].price < temp[min].price) min = j;
+        }
+        MenuItem t = temp[min]; temp[min] = temp[i]; temp[i] = t;
     }
-    if (menuList[index].id == targetId) {
-        printf("Found: %s - Price: %.2f\n", menuList[index].name, menuList[index].price);
-        return;
-    }
-    searchMenuRecursive(index + 1, targetId);
+    printf("\n--- Sorted by Price (Selection) ---");
+    printMenuArray(temp, menuCount);
 }
 
-void displayMenu() {
-    printf("\n--- CURRENT MENU ---\n");
-    printf("ID\tName\t\tPrice\tPopularity\n");
-    for (int i = 0; i < menuCount; i++) {
-        printf("%d\t%s\t\t%.2f\t%d\n", 
-               menuList[i].id, menuList[i].name, menuList[i].price, menuList[i].popularity);
+void displayMenuByPopularity() {
+    MenuItem temp[MAX_MENU];
+    memcpy(temp, menuList, sizeof(MenuItem) * menuCount);
+    for (int i = 1; i < menuCount; i++) {
+        MenuItem key = temp[i];
+        int j = i - 1;
+        while (j >= 0 && temp[j].popularity < key.popularity) {
+            temp[j + 1] = temp[j];
+            j--;
+        }
+        temp[j + 1] = key;
     }
+    printf("\n--- Sorted by Popularity (Insertion) ---");
+    printMenuArray(temp, menuCount);
 }

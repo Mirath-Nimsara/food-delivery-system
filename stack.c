@@ -24,3 +24,4 @@ UndoLog popUndo() {
     }
     return undo.logs[undo.top--];
 }
+

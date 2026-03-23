@@ -7,7 +7,7 @@
 
 Order* head = NULL; 
 
-// Helper to check if an Order ID exists
+// Helper: Check if ID exists in list
 int isOrderIdDuplicate(int id) {
     Order* temp = head;
     while (temp != NULL) {
@@ -17,56 +17,22 @@ int isOrderIdDuplicate(int id) {
     return 0;
 }
 
-// Function to put a cancelled order back into the list
+// RESTORE Function for Undo
 void restoreOrder(int id, char* name, int fId) {
-    Order* newOrder = (Order*)malloc(sizeof(Order));
-    if (newOrder == NULL) return;
-
-    newOrder->orderId = id;
-    newOrder->foodId = fId;
-    strcpy(newOrder->customerName, name);
-    
-    // Add to the front of the list
-    newOrder->next = head;
-    head = newOrder;
-    printf("SUCCESS: Order #%d restored to Active Orders!\n", id);
+    Order* newNode = (Order*)malloc(sizeof(Order));
+    if (newNode == NULL) return;
+    newNode->orderId = id;
+    newNode->foodId = fId;
+    strcpy(newNode->customerName, name);
+    newNode->next = head;
+    head = newNode;
+    printf("Order #%d restored successfully!\n", id);
 }
 
-void placeOrder() {
-    int tId, fId;
-    printf("\n--- Place New Order ---\n");
-    printf("Enter Order ID: ");
-    scanf("%d", &tId);
-
-    if (isOrderIdDuplicate(tId)) {
-        printf("Error: Order ID %d already exists!\n", tId);
-        return;
-    }
-
-    printf("Enter Food ID from Menu: ");
-    scanf("%d", &fId);
-    if (!isFoodIdValid(fId)) {
-        printf("Error: Food ID %d not in menu!\n", fId);
-        return;
-    }
-
-    Order* newOrder = (Order*)malloc(sizeof(Order));
-    newOrder->orderId = tId;
-    newOrder->foodId = fId;
-
-    printf("Enter Customer Name: ");
-    getchar(); // Clear buffer
-    fgets(newOrder->customerName, 50, stdin);
-    newOrder->customerName[strcspn(newOrder->customerName, "\n")] = 0;
-
-    newOrder->next = head;
-    head = newOrder;
-    printf("Order #%d placed successfully!\n", tId);
-}
-
+// SEARCH Function (This is what you are missing!)
 void searchOrderRecursive(Order* current, int targetId) {
     if (current == NULL) {
-        printf("Order ID %d not found.\n", targetId);
+        printf("Order ID %d not found in active orders.\n", targetId);
         return;
     }
     if (current->orderId == targetId) {
@@ -76,40 +42,54 @@ void searchOrderRecursive(Order* current, int targetId) {
     searchOrderRecursive(current->next, targetId);
 }
 
-void cancelOrder(int id) {
-    if (head == NULL) return;
-    Order *temp = head, *prev = NULL;
+void placeOrder() {
+    int oId, fId;
+    printf("\nEnter Order ID: ");
+    scanf("%d", &oId);
+    if (isOrderIdDuplicate(oId)) { printf("ID exists!\n"); return; }
+    
+    printf("Enter Food ID: ");
+    scanf("%d", &fId);
+    if (!isFoodIdValid(fId)) { printf("Not in menu!\n"); return; }
 
-    while (temp != NULL && temp->orderId != id) {
-        prev = temp;
+    Order* n = (Order*)malloc(sizeof(Order));
+    n->orderId = oId;
+    n->foodId = fId;
+    printf("Customer Name: ");
+    getchar();
+    fgets(n->customerName, 50, stdin);
+    n->customerName[strcspn(n->customerName, "\n")] = 0;
+    
+    n->next = head;
+    head = n;
+    printf("Order placed!\n");
+}
+
+void cancelOrder(int id) {
+    if (!head) return;
+    Order *temp = head, *prev = NULL;
+    while (temp && temp->orderId != id) {
+        prev = temp; 
         temp = temp->next;
     }
+    if (!temp) { printf("Not found!\n"); return; }
 
-    if (temp == NULL) {
-        printf("Order #%d not found!\n", id);
-        return;
-    }
-
-    // Save to stack for UNDO before deleting
     pushUndo(temp->orderId, temp->customerName, temp->foodId);
 
-    if (prev == NULL) head = temp->next;
+    if (!prev) head = temp->next;
     else prev->next = temp->next;
-
     free(temp);
     printf("Order #%d cancelled.\n", id);
 }
 
 void displayActiveOrders() {
-    Order* temp = head;
-    if (temp == NULL) {
-        printf("\nNo active orders.\n");
+    Order* t = head;
+    if(!t) {
+        printf("No active orders.\n");
         return;
     }
-    printf("\n--- ACTIVE ORDERS ---\n");
-    while (temp != NULL) {
-        printf("ID: %d | Customer: %s | Food ID: %d\n", 
-               temp->orderId, temp->customerName, temp->foodId);
-        temp = temp->next;
+    while(t) {
+        printf("ID: %d | Customer: %s | Food: %d\n", t->orderId, t->customerName, t->foodId);
+        t = t->next;
     }
 }
