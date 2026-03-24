@@ -4,7 +4,7 @@
 KitchenQueue kitchen;
 int orderReadyForPickup = -1;
 
-// BUG FIX: Ready Queue to store multiple cooked orders for riders
+
 int readyQueue[MAX_QUEUE];
 int rFront = 0, rRear = -1;
 

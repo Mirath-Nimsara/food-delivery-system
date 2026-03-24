@@ -4,7 +4,7 @@
 #include "circular.h"
 #include "queue.h"
 
-// Pulling multiple cooked orders from queue.c
+
 extern int readyQueue[];
 extern int rFront, rRear;
 
