@@ -8,12 +8,12 @@ typedef struct Order {
     struct Order* next;
 } Order;
 
-// Function Prototypes - MUST BE HERE
 void placeOrder();
 void displayActiveOrders();
-void searchOrderRecursive(Order* current, int targetId);
 void cancelOrder(int id);
+void searchOrderRecursive(Order* current, int targetId);
 int isOrderIdDuplicate(int id);
-void restoreOrder(int id, char* name, int fId); // Added this
+void restoreOrder(int id, char* name, int fId);
+void removeFromListInternal(int id); 
 
 #endif

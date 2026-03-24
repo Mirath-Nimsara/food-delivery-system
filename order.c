@@ -4,10 +4,10 @@
 #include "order.h"
 #include "menu.h"
 #include "stack.h"
+#include "queue.h"
 
 Order* head = NULL; 
 
-// Helper: Check if ID exists in list
 int isOrderIdDuplicate(int id) {
     Order* temp = head;
     while (temp != NULL) {
@@ -17,7 +17,6 @@ int isOrderIdDuplicate(int id) {
     return 0;
 }
 
-// RESTORE Function for Undo
 void restoreOrder(int id, char* name, int fId) {
     Order* newNode = (Order*)malloc(sizeof(Order));
     if (newNode == NULL) return;
@@ -29,7 +28,6 @@ void restoreOrder(int id, char* name, int fId) {
     printf("Order #%d restored successfully!\n", id);
 }
 
-// SEARCH Function (This is what you are missing!)
 void searchOrderRecursive(Order* current, int targetId) {
     if (current == NULL) {
         printf("Order ID %d not found in active orders.\n", targetId);
@@ -66,7 +64,16 @@ void placeOrder() {
 }
 
 void cancelOrder(int id) {
-    if (!head) return;
+    if (!head) {
+    printf("Order is already cooked");
+        return;
+    }
+ 
+    if (isOrderInQueue(id)) {
+        printf("Error: Order #%d is already in the kitchen! Cannot cancel.\n", id);
+        return;
+    }
+
     Order *temp = head, *prev = NULL;
     while (temp && temp->orderId != id) {
         prev = temp; 
@@ -80,6 +87,20 @@ void cancelOrder(int id) {
     else prev->next = temp->next;
     free(temp);
     printf("Order #%d cancelled.\n", id);
+}
+
+
+void removeFromListInternal(int id) {
+    Order *temp = head, *prev = NULL;
+    while (temp && temp->orderId != id) {
+        prev = temp;
+        temp = temp->next;
+    }
+    if (temp) {
+        if (!prev) head = temp->next;
+        else prev->next = temp->next;
+        free(temp);
+    }
 }
 
 void displayActiveOrders() {

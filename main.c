@@ -53,9 +53,9 @@ int main() {
                 printf("Enter Order ID to send to kitchen: ");
                 scanf("%d", &qId);
                 
-                // First check: Does the order even exist?
+                
                 if (isOrderIdDuplicate(qId)) {
-                    // Second check happens inside this function now:
+                    
                     sendToKitchen(qId);
                 } else {
                     printf("Error: Order #%d not found in active orders!\n", qId);

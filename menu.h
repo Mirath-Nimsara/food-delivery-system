@@ -10,11 +10,10 @@ typedef struct {
     int popularity;
 } MenuItem;
 
-// Function Prototypes
 void addMenuItem();
-void displayMenuById();         // Bubble Sort
-void displayMenuByPrice();      // Selection Sort
-void displayMenuByPopularity(); // Insertion Sort
+void displayMenuById();        
+void displayMenuByPrice();     
+void displayMenuByPopularity(); 
 void printMenuArray(MenuItem arr[], int count);
 int isFoodIdValid(int targetId);
 

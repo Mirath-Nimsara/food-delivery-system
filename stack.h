@@ -3,7 +3,6 @@
 
 #define MAX_STACK 100
 
-// Structure to hold all details of a cancelled order
 typedef struct {
     int orderId;
     char customerName[50];
@@ -11,7 +10,7 @@ typedef struct {
 } UndoLog;
 
 typedef struct {
-    UndoLog logs[MAX_STACK]; // Array of structs
+    UndoLog logs[MAX_STACK]; 
     int top;
 } UndoStack;
 

@@ -13,8 +13,11 @@ void initQueue();
 void sendToKitchen(int orderId);
 int processNextOrder();
 void displayKitchenQueue();
-int isOrderInQueue(int orderId); // NEW: Helper to check queue contents
+int isOrderInQueue(int orderId);
 
 extern int orderReadyForPickup; 
+
+extern int readyQueue[];
+extern int rFront, rRear;
 
 #endif

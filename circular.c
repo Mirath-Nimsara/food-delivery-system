@@ -2,7 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "circular.h"
-#include "queue.h" // Needed for orderReadyForPickup
+#include "queue.h"
+
+// Pulling multiple cooked orders from queue.c
+extern int readyQueue[];
+extern int rFront, rRear;
 
 Rider* currentRider = NULL;
 
@@ -28,15 +32,15 @@ void assignNextRider() {
         return;
     }
 
-    // Check if an order was actually cooked in queue.c
-    if (orderReadyForPickup == -1) {
-        printf("Error: No cooked orders ready for pickup! Process an order first.\n");
+    if (rFront > rRear) {
+        printf("Error: No cooked orders ready for pickup!\n");
         return;
     }
 
+    int currentOrder = readyQueue[rFront++]; 
     currentRider = currentRider->next; 
-    printf("SUCCESS: Order #%d assigned to Rider: %s\n", orderReadyForPickup, currentRider->name);
+    printf("SUCCESS: Order #%d assigned to Rider: %s\n", currentOrder, currentRider->name);
     
-    // Clear the ready status so the same order isn't assigned twice
-    orderReadyForPickup = -1; 
+  
+    if (rFront > rRear) orderReadyForPickup = -1;
 }
