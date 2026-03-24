@@ -15,10 +15,11 @@ int main() {
     initStack();
 
     while (1) {
-        printf("\n======= FOOD DELIVERY SYSTEM =======\n");
-        printf("1. Add Menu | 2. Display Menu | 3. Place Order  | 4. View Orders\n");
-        printf("5. Search   | 6. Cancel       | 7. To Kitchen   | 8. Cook Order\n");
-        printf("9. UNDO     | 10. Add Rider   | 11. Assign Rider| 12. History         | 13. Exit\n");
+        printf("\n                       ======= FOOD DELIVERY SYSTEM =======\n\n");
+        printf("1. Add Menu          | 2. Display Menu     | 3. Place Order       | 4. View Orders\n");
+        printf("5. Search Order      | 6. Cancel Order     | 7. Send To Kitchen   | 8. Cook Order\n");
+        printf("9. Undo Order        | 10. Add Rider       | 11.Assign Rider      | 12. History(Forward)\n");
+        printf("13.History(Backward) | 14.Display Queue    | 15.Exit              |\n");
         printf("Enter Choice: ");
         
         if (scanf("%d", &choice) != 1) {
@@ -78,7 +79,9 @@ int main() {
             }
             case 11: assignNextRider(); break;
             case 12: displayHistoryForward(); break;
-            case 13: exit(0);
+            case 13: displayHistoryBackward();break;
+            case 14: displayKitchenQueue() ;break;
+            case 15: exit(0);
             default: 
                 printf("Invalid choice! Try again.\n");
         }

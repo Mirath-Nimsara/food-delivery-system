@@ -9,5 +9,6 @@ typedef struct HistoryNode {
 
 void addToHistory(int id);
 void displayHistoryForward();
+void displayHistoryBackward(); 
 
 #endif
